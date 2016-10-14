@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HatenaProxy", "HatenaProxy\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HatenaProxy.Tests", "HatenaProxy.Tests\HatenaProxy.Tests.csproj", "{F8360371-9214-4B11-A681-62A10C9CDA60}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HatenaProxyConsole", "HatenaProxyConsole\HatenaProxyConsole.csproj", "{D42B0BA0-4570-43E4-9000-028DD920BB1B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{F8360371-9214-4B11-A681-62A10C9CDA60}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F8360371-9214-4B11-A681-62A10C9CDA60}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F8360371-9214-4B11-A681-62A10C9CDA60}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D42B0BA0-4570-43E4-9000-028DD920BB1B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D42B0BA0-4570-43E4-9000-028DD920BB1B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D42B0BA0-4570-43E4-9000-028DD920BB1B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D42B0BA0-4570-43E4-9000-028DD920BB1B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
