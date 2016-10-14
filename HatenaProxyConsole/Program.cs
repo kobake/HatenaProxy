@@ -23,7 +23,7 @@ namespace HatenaProxyConsole
             Task.Run(async () => {
 
                 // 情報取得
-                string user = "kobake";
+                string user = "feita";
 
                 
                 try{

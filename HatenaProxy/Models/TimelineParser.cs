@@ -92,7 +92,11 @@ namespace HatenaProxy.Models
 
             List<TimelineItem> ret = new List<TimelineItem>();
             var cq = new CQ(html);
-            cq[".entrylist-unit"].Each((_entry) => {
+            cq[".entrylist-unit"].Each((_entry) => { // kobake の場合はこれがヒットした
+                var item = _TimelineItem(_entry);
+                ret.AddRange(item);
+            });
+            cq[".entry-block"].Each((_entry) => { // feita の場合はこれがヒットした
                 var item = _TimelineItem(_entry);
                 ret.AddRange(item);
             });
@@ -105,7 +109,26 @@ namespace HatenaProxy.Models
 
             // コメント情報
             var entry = new CQ(_entry.InnerHTML);
-            entry["ul.comment>li"].Each((_comment) =>
+            entry["ul.comment>li"].Each((_comment) => // kobake の場合はこれがヒットした
+            {
+                var item = new TimelineItem();
+
+                // 記事情報
+                var link = entry[".entry-link"];
+                item.ArticleName = link.Text();
+                item.ArticleUrl = link.Attr("href");
+                int bookmarkCount = 0;
+                int.TryParse(_entry.Attributes["data-bookmark-count"], out bookmarkCount);
+                item.BookmarkCount = bookmarkCount;
+
+                // コメント情報
+                item.Comment = _HatenaComment(_comment);
+                if (!string.IsNullOrEmpty(item.Comment.Comment)) // コメント文があるものだけをリストに追加
+                {
+                    ret.Add(item);
+                }
+            });
+            entry["ul.entry-comment>li"].Each((_comment) => // feita の場合はこれがヒットした
             {
                 var item = new TimelineItem();
 
