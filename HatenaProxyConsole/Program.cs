@@ -1,5 +1,6 @@
 ﻿using CsQuery;
 using HatenaProxy.Controllers.api;
+using HatenaProxy.Models;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -12,79 +13,7 @@ using System.Threading.Tasks;
 
 namespace HatenaProxyConsole
 {
-    public class TimelineParser
-    {
-
-        public static async Task<List<TimelineItem>> Generate(string user)
-        {
-            string otherTimelineUrl = $"http://b.hatena.ne.jp/{user}/favorite";
-            string myTimelineUrl = $"http://b.hatena.ne.jp/{user}/";
-            List<TimelineItem> otherTimelines = await _GetTimelineListFromUrl(otherTimelineUrl);
-            List<TimelineItem> myTimelines = await _GetTimelineListFromUrl(myTimelineUrl);
-
-            // 結合
-            List<TimelineItem> ret = new List<TimelineItem>();
-            ret.AddRange(otherTimelines);
-            ret.AddRange(myTimelines);
-
-            // ソート (日付降順)
-            ret = ret.OrderByDescending(item => item.Comment.Date).ToList();
-            return ret;
-        }
-
-        private static async Task<List<TimelineItem>> _GetTimelineListFromUrl(string url)
-        {
-            WebClient client = new WebClient();
-            client.Headers.Add("user-agent", "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.2; .NET CLR 1.0.3705;)");
-            client.Encoding = Encoding.GetEncoding("UTF-8");
-            string html = await client.DownloadStringTaskAsync(url);
-
-            List<TimelineItem> ret = new List<TimelineItem>();
-            var cq = new CQ(html);
-            cq[".entrylist-unit"].Each((_entry) => {
-                var item = _TimelineItem(_entry);
-                ret.AddRange(item);
-            });
-            return ret;
-        }
-
-        private static List<TimelineItem> _TimelineItem(IDomObject _entry)
-        {
-            List<TimelineItem> ret = new List<TimelineItem>();
-
-            // コメント情報
-            var entry = new CQ(_entry.InnerHTML);
-            entry["ul.comment>li"].Each((_comment) =>
-            {
-                var item = new TimelineItem();
-
-                // 記事情報
-                var link = entry[".entry-link"];
-                item.ArticleName = link.Text();
-                item.ArticleUrl = link.Attr("href");
-                int bookmarkCount = 0;
-                int.TryParse(_entry.Attributes["data-bookmark-count"], out bookmarkCount);
-                item.BookmarkCount = bookmarkCount;
-
-                // コメント情報
-                item.Comment = _HatenaComment(_comment);
-                if (!string.IsNullOrEmpty(item.Comment.Comment)) // コメント文があるものだけをリストに追加
-                {
-                    ret.Add(item);
-                }
-            });
-            return ret;
-        }
-        private static HatenaComment _HatenaComment(IDomObject _comment)
-        {
-            HatenaComment ret = new HatenaComment();
-            var comment = new CQ(_comment.OuterHTML);
-            ret.UserId = _comment.Attributes["data-user"];
-            ret.Date = comment["span.timestamp"].Text().Trim();
-            ret.Comment = comment["span.comment"].Text().Trim();
-            return ret;
-        }
-    }
+    
     class Program
     {
         static void Main(string[] args)
