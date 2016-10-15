@@ -87,19 +87,19 @@ namespace HatenaProxy.Models
         private static async Task<List<TimelineItem>> _GetTimelineListFromUrl(string url)
         {
             WebClient client = new WebClient();
-            client.Headers.Add("user-agent", "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.2; .NET CLR 1.0.3705;)");
+            client.Headers.Add("user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.59 Safari/537.36");
             client.Encoding = Encoding.GetEncoding("UTF-8");
             string html = await client.DownloadStringTaskAsync(url);
 
             List<TimelineItem> ret = new List<TimelineItem>();
             var cq = new CQ(html);
             cq[".entrylist-unit"].Each((_entry) => { // kobake の場合はこれがヒットした
-                var item = _TimelineItem(_entry);
-                ret.AddRange(item);
+                var items = _TimelineItem(_entry);
+                ret.AddRange(items);
             });
             cq[".entry-block"].Each((_entry) => { // feita の場合はこれがヒットした
-                var item = _TimelineItem(_entry);
-                ret.AddRange(item);
+                var items = _TimelineItem(_entry);
+                ret.AddRange(items);
             });
             return ret;
         }
