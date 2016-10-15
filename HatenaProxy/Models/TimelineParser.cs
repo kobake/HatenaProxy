@@ -46,6 +46,7 @@ namespace HatenaProxy.Models
     {
         public string ArticleName { get; set; }
         public string ArticleUrl { get; set; }
+        public string ArticleId { get; set; }
 
         public string HatenaUrl
         {
@@ -117,6 +118,9 @@ namespace HatenaProxy.Models
                 var link = entry[".entry-link"];
                 item.ArticleName = link.Text();
                 item.ArticleUrl = link.Attr("href");
+                item.ArticleId = _entry.Attributes["data-eid"];
+                if (item.ArticleId == null) item.ArticleId = "";
+
                 int bookmarkCount = 0;
                 int.TryParse(_entry.Attributes["data-bookmark-count"], out bookmarkCount);
                 item.BookmarkCount = bookmarkCount;
@@ -136,6 +140,9 @@ namespace HatenaProxy.Models
                 var link = entry[".entry-link"];
                 item.ArticleName = link.Text();
                 item.ArticleUrl = link.Attr("href");
+                item.ArticleId = _entry.Attributes["data-eid"];
+                if (item.ArticleId == null) item.ArticleId = "";
+
                 int bookmarkCount = 0;
                 int.TryParse(_entry.Attributes["data-bookmark-count"], out bookmarkCount);
                 item.BookmarkCount = bookmarkCount;
